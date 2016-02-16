@@ -10,7 +10,7 @@ from const import Constant
 log = logger.getLogger(__name__)
 
 
-class Config(Singleton):
+class Config(Singleton): # Hong: 继承，class DerivedClassName(BaseClassName)，https://docs.python.org/3/tutorial/classes.html#inheritance
     def __init__(self):
         if hasattr(self, '_init'):
             return
