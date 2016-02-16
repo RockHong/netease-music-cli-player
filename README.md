@@ -1,3 +1,8 @@
+Fork from https://github.com/darknessomi/musicbox.
+To build a non-inactive cli player. and user python3. and learn some python.
+
+
+
 NetEase-MusicBox
 =================
 
