@@ -49,6 +49,7 @@ if __name__ == '__main__':
     ppp = player.Player()
     paras = urls[0]
     print paras
+    ppp.playing_flag = True
     ppp.popen_recall(do_nothing, paras)
 
 

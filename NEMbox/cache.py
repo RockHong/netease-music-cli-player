@@ -41,12 +41,15 @@ class Cache(Singleton):
             return False
         while True:
             if self.stop:
+                print '111'
                 break
             if not self.enable:
+                print '112221'
                 break
             self.check_lock.acquire()
             if len(self.downloading) <= 0:
                 self.check_lock.release()
+                print '111333'
                 break
             data = self.downloading.pop()
             self.check_lock.release()
@@ -56,16 +59,20 @@ class Cache(Singleton):
             url = data[3]
             onExit = data[4]
             output_path = Constant.download_dir
-            output_file = str(artist) + " - " + str(song_name) + ".mp3"
+            # hong
+            #output_file = str(artist) + " - " + str(song_name) + ".mp3"
+            output_file = str(song_id)  + ".mp3"
             try:
                 para = ['aria2c', '--auto-file-renaming=false', '--allow-overwrite=true', '-d', output_path, '-o',
                         output_file, url]
+                print output_path + output_file
                 para[1:1] = self.aria2c_parameters
                 self.aria2c = subprocess.Popen(para,
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
                 self.aria2c.wait()
+                print '1155551'
             except Exception:
                 log.debug(str(song_id) + " Cache Error")
             if self.aria2c.returncode == 0:

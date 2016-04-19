@@ -75,9 +75,12 @@ class Player:
             self.process_first = True
             while (True):
                 if self.playing_flag == False:
+                    print '222'
                     break
                 try:
                     strout = self.popen_handler.stdout.readline()
+                    print '111'
+                    print strout
                 except IOError:
                     break
                 if re.match("^\@F.*$", strout):
@@ -128,12 +131,16 @@ class Player:
 
         def cacheSong(song_id, song_name, artist, song_url):
             def cacheExit(song_id, path):
-                self.songs[str(song_id)]['cache'] = path
+                # hong, comment out
+                #self.songs[str(song_id)]['cache'] = path
+                pass
 
             self.cache.add(song_id, song_name, artist, song_url, cacheExit)
             self.cache.start_download()
 
-        if 'cache' in popenArgs.keys() and os.path.isfile(popenArgs['cache']):
+        if os.path.isfile('~/.netease-musicbox/'+str(popenArgs['song_id'])+'.mp3'):
+        #if 'cache' in popenArgs.keys() and os.path.isfile(popenArgs['cache']):
+            print 'cached found'
             thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['cache']))
         else:
             thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['mp3_url']))
