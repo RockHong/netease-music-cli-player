@@ -10,6 +10,7 @@
 网易云音乐 Menu
 '''
 
+# Hong, supplies a terminal-independent screen-painting and keyboard-handling facility for text-based terminals
 import curses
 import locale
 import threading
@@ -145,6 +146,8 @@ class Menu:
         return root[0][4][0][0].text
 
     def start_fork(self, version):
+        # Hong, Fork a child process. 
+        # Return 0 in the child and the child’s process id in the parent.
         pid = os.fork()
         if pid == 0:
             Menu().alert(version)
@@ -173,6 +176,7 @@ class Menu:
         time.sleep(0.1)
 
     def start(self):
+        # Hong, Return the time in seconds since the epoch as a floating point number.
         self.START = time.time() // 1
         self.ui.build_menu(self.datatype, self.title, self.datalist, self.offset, self.index, self.step, self.START)
         self.ui.build_process_bar(self.player.process_location, self.player.process_length, self.player.playing_flag,
@@ -203,6 +207,8 @@ class Menu:
                 self.player.update_size()
 
             # 退出
+            # Hong, ord(), Given a string of length one, return an integer representing the Unicode code point of the character when the argument is a unicode object, 
+            # or the value of the byte when the argument is an 8-bit string.
             if key == ord('q'):
                 break
 

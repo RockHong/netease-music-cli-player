@@ -34,7 +34,8 @@ carousel = lambda left, right, x: left if (x > right) else (right if x < left el
 class Player:
     def __init__(self):
         self.config = Config()
-        self.ui = Ui()
+        # Hong, tmply comment out
+        #self.ui = Ui()
         self.popen_handler = None
         # flag stop, prevent thread start
         self.playing_flag = False
@@ -59,6 +60,9 @@ class Player:
         onExit is a callable object, and popenArgs is a lists/tuple of args that
         would give to subprocess.Popen.
         """
+
+        def runInThread2(onExit, popenArgs):
+            print '>'+popenArgs+'<'
 
         def runInThread(onExit, popenArgs):
             para = ['mpg123', '-R']
@@ -137,10 +141,11 @@ class Player:
                 popenArgs['song_id'], popenArgs['song_name'], popenArgs['artist'], popenArgs['mp3_url']))
             cache_thread.start()
         thread.start()
-        lyric_download_thread = threading.Thread(target=getLyric, args=())
-        lyric_download_thread.start()
-        tlyric_download_thread = threading.Thread(target=gettLyric, args=())
-        tlyric_download_thread.start()
+        # Hong, comment out following 4 lines
+        #lyric_download_thread = threading.Thread(target=getLyric, args=())
+        #lyric_download_thread.start()
+        #tlyric_download_thread = threading.Thread(target=gettLyric, args=())
+        #tlyric_download_thread.start()
         # returns immediately after the thread starts
         return thread
 
@@ -161,6 +166,7 @@ class Player:
         if self.notifier == True:
             self.ui.notify("Now playing", item['song_name'], item['album_name'], item['artist'])
         self.playing_id = item['song_id']
+        # Hong, function are first-class object, so 'recall' can be referred and passed around
         self.popen_recall(self.recall, item)
 
     def generate_shuffle_playing_list(self):
