@@ -141,7 +141,8 @@ class Player:
         if os.path.isfile('~/.netease-musicbox/'+str(popenArgs['song_id'])+'.mp3'):
         #if 'cache' in popenArgs.keys() and os.path.isfile(popenArgs['cache']):
             print 'cached found'
-            thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['cache']))
+            #thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['cache']))
+            thread = threading.Thread(target=runInThread, args=(onExit, '~/.netease-musicbox/'+str(popenArgs['song_id'])+'.mp3'))
         else:
             thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['mp3_url']))
             cache_thread = threading.Thread(target=cacheSong, args=(
