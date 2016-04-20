@@ -30,7 +30,14 @@ if __name__ == '__main__':
     ## Hong test
     import api
     import json
+    import hashlib
     xxx = api.NetEase()
+    # user log in
+    account = 'focus@163.com'
+    password = hashlib.md5( 'hdd').hexdigest()
+    userinfo = xxx.login(account, password)
+    #userinfo = xxx.phone_login('focus_on_one_thing@163.com', 'hzh123456wf')
+    print json.dumps(userinfo,sort_keys=True,indent=2)
     # list playlists of a given user
     data = xxx.user_playlist(267877324);
     print json.dumps(data,sort_keys=True,indent=2)
@@ -49,6 +56,7 @@ if __name__ == '__main__':
     ppp = player.Player()
     paras = urls[0]
     print paras
+    print paras['song_name'].encode('utf-8')
     ppp.playing_flag = True
     ppp.popen_recall(do_nothing, paras)
 
