@@ -65,41 +65,44 @@ class Player:
             print '>'+popenArgs+'<'
 
         def runInThread(onExit, popenArgs):
-            para = ['mpg123', '-R']
-            para[1:1] = self.mpg123_parameters
-            self.popen_handler = subprocess.Popen(para, stdin=subprocess.PIPE,
-                                                  stdout=subprocess.PIPE,
-                                                  stderr=subprocess.PIPE)
-            self.popen_handler.stdin.write("V " + str(self.info["playing_volume"]) + "\n")
-            self.popen_handler.stdin.write("L " + popenArgs + "\n")
-            self.process_first = True
-            while (True):
-                if self.playing_flag == False:
-                    print '222'
-                    break
-                try:
-                    strout = self.popen_handler.stdout.readline()
-                    print '111'
-                    print strout
-                except IOError:
-                    break
-                if re.match("^\@F.*$", strout):
-                    process_data = strout.split(" ")
-                    process_location = float(process_data[4])
-                    if self.process_first:
-                        self.process_length = process_location
-                        self.process_first = False
-                        self.process_location = 0
-                    else:
-                        self.process_location = self.process_length - process_location
-                    continue
-                if strout == "@P 0\n":
-                    self.popen_handler.stdin.write("Q\n")
-                    self.popen_handler.kill()
-                    break
+            import os
+            os.system('mpg321 ' + popenArgs)
+            #para = ['mpg123', '-R']
+            #para[1:1] = self.mpg123_parameters
+            #para = ['mpg321', popenArgs]
+            #self.popen_handler = subprocess.Popen(para, stdin=subprocess.PIPE,
+            #                                      stdout=subprocess.PIPE,
+            #                                      stderr=subprocess.PIPE)
+            #self.popen_handler.stdin.write("V " + str(self.info["playing_volume"]) + "\n")
+            #self.popen_handler.stdin.write("L " + popenArgs + "\n")
+            #self.process_first = True
+            #while (True):
+            #    if self.playing_flag == False:
+            #        print '222'
+            #        break
+            #    try:
+            #        strout = self.popen_handler.stdout.readline()
+            #        print '111'
+            #        print strout
+            #    except IOError:
+            #        break
+            #    if re.match("^\@F.*$", strout):
+            #        process_data = strout.split(" ")
+            #        process_location = float(process_data[4])
+            #        if self.process_first:
+            #            self.process_length = process_location
+            #            self.process_first = False
+            #            self.process_location = 0
+            #        else:
+            #            self.process_location = self.process_length - process_location
+            #        continue
+            #    if strout == "@P 0\n":
+            #        self.popen_handler.stdin.write("Q\n")
+            #        self.popen_handler.kill()
+            #        break
 
             if self.playing_flag:
-                self.next_idx()
+                #self.next_idx()
                 onExit()
             return
 
@@ -138,24 +141,30 @@ class Player:
             self.cache.add(song_id, song_name, artist, song_url, cacheExit)
             self.cache.start_download()
 
-        if os.path.isfile('~/.netease-musicbox/'+str(popenArgs['song_id'])+'.mp3'):
+        cached_song = '~/.netease-musicbox/cached/'+str(popenArgs['song_id'])+'.mp3'
+        cached_song = '/home/pi/.netease-musicbox/cached/'+str(popenArgs['song_id'])+'.mp3'
+        print cached_song
+        if os.path.isfile(cached_song):
         #if 'cache' in popenArgs.keys() and os.path.isfile(popenArgs['cache']):
             print 'cached found'
             #thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['cache']))
-            thread = threading.Thread(target=runInThread, args=(onExit, '~/.netease-musicbox/'+str(popenArgs['song_id'])+'.mp3'))
+            #thread = threading.Thread(target=runInThread, args=(onExit, cached_song))
+            runInThread(onExit, cached_song)
         else:
-            thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['mp3_url']))
+            print 'cache not found'
+            #thread = threading.Thread(target=runInThread, args=(onExit, popenArgs['mp3_url']))
+            runInThread(onExit, popenArgs['mp3_url'])
             cache_thread = threading.Thread(target=cacheSong, args=(
                 popenArgs['song_id'], popenArgs['song_name'], popenArgs['artist'], popenArgs['mp3_url']))
             cache_thread.start()
-        thread.start()
+        #thread.start()
         # Hong, comment out following 4 lines
         #lyric_download_thread = threading.Thread(target=getLyric, args=())
         #lyric_download_thread.start()
         #tlyric_download_thread = threading.Thread(target=gettLyric, args=())
         #tlyric_download_thread.start()
         # returns immediately after the thread starts
-        return thread
+        #return thread
 
     def get_playing_id(self):
         return self.playing_id

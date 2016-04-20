@@ -6,6 +6,15 @@ Don't delete this repo.
 
 Hong's notes end.
 
+todo
+add option:
+    shuffle
+    -n 3,  play 3 song
+add config
+    max cache song num
+    cache, on / off
+    user name/password
+
 
 NetEase-MusicBox
 =================

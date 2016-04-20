@@ -33,32 +33,36 @@ if __name__ == '__main__':
     import hashlib
     xxx = api.NetEase()
     # user log in
-    account = 'focus@163.com'
-    password = hashlib.md5( 'hdd').hexdigest()
-    userinfo = xxx.login(account, password)
+    #account = 'focus@163.com'
+    #password = hashlib.md5( 'hdd').hexdigest()
+    #userinfo = xxx.login(account, password)
     #userinfo = xxx.phone_login('focus_on_one_thing@163.com', 'hzh123456wf')
-    print json.dumps(userinfo,sort_keys=True,indent=2)
-    # list playlists of a given user
+    #print json.dumps(userinfo,sort_keys=True,indent=2)
+    ###### list playlists of a given user
     data = xxx.user_playlist(267877324);
+    print 'user info ================='
     print json.dumps(data,sort_keys=True,indent=2)
-    # list songs of a playlist
-    print '--------------------------------'
+    ###### list songs of a playlist
     songs = xxx.playlist_detail(366139779)
+    print '-----play list info--------------------------'
     print json.dumps(songs,sort_keys=True,indent=2)
-    # get url of song(s)
-    print '----------22---------------------'
-    urls = xxx.dig_info(songs, 'songs')
-    print json.dumps(urls,sort_keys=True,indent=2)
-    # play (and cache) song
+    ####### get url of song(s)
+    song_infos = xxx.dig_info(songs, 'songs')
+    print '----------song info, url---------------------'
+    print json.dumps(song_infos,sort_keys=True,indent=2)
+    ####### play (and cache) song
     import player
     def do_nothing():
         print 'do nothing'
     ppp = player.Player()
-    paras = urls[0]
-    print paras
-    print paras['song_name'].encode('utf-8')
-    ppp.playing_flag = True
-    ppp.popen_recall(do_nothing, paras)
+    import random
+    random.shuffle(song_infos)
+    for song in song_infos:
+        paras = song
+        print paras
+        print paras['song_name'].encode('utf-8')
+        ppp.playing_flag = True
+        ppp.popen_recall(do_nothing, paras)
 
 
 
